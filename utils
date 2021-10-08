@@ -1,0 +1,48 @@
+
+const fs = require('fs');
+
+const save = (movieListArr) =>{
+    let stringyObj = JSON.stringify(movieListArr);
+    fs.writeFileSync('./netflix.json', stringyObj);    
+}
+
+exports.add = (movieListArr, input) => {
+    let movieObj = {movie: input};
+    movieListArr.push(movieObj);
+    save(movieListArr);
+    console.log("Movie added")
+}
+
+exports.list = () => {
+
+    fs.readFile('./netflix.json','utf8', function(err,data){
+        console.log(data)
+    })
+    
+
+}
+
+exports.update = (movieListArr, input) => {
+ let findindex;
+ movieListArr.map((movie, index) => { 
+     if( movie.movie === input){
+         findindex = index
+     }
+ })
+ const value = process.argv[4];
+ movieListArr.splice([findindex],1,{ movie :value})
+  save(movieListArr)
+  console.log("movie  " + input +" updated to " + value)
+
+} 
+         
+
+exports.deleteMovie = (movieListArr, input) => {
+    let newArr = movieListArr.filter((moviedel) => (moviedel.movie) !== input);
+    if (newArr.length >= 0){
+        save(newArr);
+        console.log("Movie deleted")
+    }
+    }
+
+
